@@ -1,6 +1,10 @@
 import { crew, videos, stats, type ShowLane, type Video } from './data'
 import { useState } from 'react'
 
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+const route = (path: string) => `${basePath}${path}`
+
 const ArrowUpRight = () => <span aria-hidden="true" className="arrow">↗</span>
 
 function VideoCard({ video, featured = false }: { video: Video; featured?: boolean }) {
