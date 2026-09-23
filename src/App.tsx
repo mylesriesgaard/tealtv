@@ -19,18 +19,30 @@ function VideoCard({ video, featured = false }: { video: Video; featured?: boole
   )
 }
 
-const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
+const siteRoot = new URL(import.meta.env.BASE_URL, document.baseURI).pathname.replace(/\/$/, '')
 
-const route = (path: string) => `${basePath}${path}`
+const route = (path: string) => {
+  if (path.startsWith('#')) return `${siteRoot || '/'}${path}`
+  return `${siteRoot}${path}` || '/'
+}
+
+const getSitePath = () => {
+  const pathname = window.location.pathname
+  const rootPrefix = siteRoot ? `${siteRoot}/` : '/'
+  const path = pathname === siteRoot
+    ? '/'
+    : pathname.startsWith(rootPrefix)
+      ? pathname.slice(siteRoot.length)
+      : pathname
+
+  return path.replace(/\/$/, '') || '/'
+}
 
 function SiteNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const closeMenu = () => setIsMenuOpen(false)
 
-  const currentPath =
-    window.location.pathname
-      .replace(basePath, '')
-      .replace(/\/$/, '') || '/'
+  const currentPath = getSitePath()
 
   const isActive = (path: string) => currentPath === path
 
@@ -322,10 +334,7 @@ function HomePage() {
 }
 
 export function App() {
-  const path =
-  window.location.pathname
-    .replace(basePath, '')
-    .replace(/\/$/, '') || '/'
+  const path = getSitePath()
   if (path === '/seahawk-central') return <SeriesPage name="Seahawk Central" description="The news and sports desk for what’s happening on campus, downtown, and everywhere in between." laneVideos={videos.filter((video) => video.show === 'Seahawk Central')} accent="#d6ad55" />
   if (path === '/hawkstream') return <SeriesPage name="Hawkstream" description="A creative current of art, sketch, and entertainment videos, hosted and edited by students." laneVideos={videos.filter((video) => video.show === 'Hawkstream')} accent="#8ddfd1" />
   if (path === '/crew') return <CrewPage />
