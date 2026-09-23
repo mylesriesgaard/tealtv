@@ -1,10 +1,6 @@
 import { crew, videos, stats, type ShowLane, type Video } from './data'
 import { useState } from 'react'
 
-const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
-
-const route = (path: string) => `${basePath}${path}`
-
 const ArrowUpRight = () => <span aria-hidden="true" className="arrow">↗</span>
 
 function VideoCard({ video, featured = false }: { video: Video; featured?: boolean }) {
@@ -23,32 +19,109 @@ function VideoCard({ video, featured = false }: { video: Video; featured?: boole
   )
 }
 
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+const route = (path: string) => `${basePath}${path}`
+
 function SiteNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const closeMenu = () => setIsMenuOpen(false)
-  const currentPath = window.location.pathname.replace(/\/$/, '') || '/'
+
+  const currentPath =
+    window.location.pathname
+      .replace(basePath, '')
+      .replace(/\/$/, '') || '/'
+
   const isActive = (path: string) => currentPath === path
 
   return (
     <nav className="site-nav">
-      <a className="brand" href="/" aria-label="TealTV home"><span className="brand-word">TEAL<span>TV</span></span></a>
+      <a className="brand" href={route('/')} aria-label="TealTV home">
+        <span className="brand-word">
+          TEAL<span>TV</span>
+        </span>
+      </a>
+
       <div className="nav-links">
-        <a className={isActive('/archive') ? 'is-active' : ''} href="/archive">Archive</a>
-        <a className={isActive('/seahawk-central') ? 'is-active' : ''} href="/seahawk-central">Seahawk Central</a>
-        <a className={isActive('/hawkstream') ? 'is-active' : ''} href="/hawkstream">Hawkstream</a>
-        <a className={isActive('/crew') ? 'is-active' : ''} href="/crew">Meet the crew</a>
-        <a className={isActive('/get-involved') ? 'is-active' : ''} href="/get-involved">Get involved</a>
+        <a
+          className={isActive('/archive') ? 'is-active' : ''}
+          href={route('/archive')}
+        >
+          Archive
+        </a>
+
+        <a
+          className={isActive('/seahawk-central') ? 'is-active' : ''}
+          href={route('/seahawk-central')}
+        >
+          Seahawk Central
+        </a>
+
+        <a
+          className={isActive('/hawkstream') ? 'is-active' : ''}
+          href={route('/hawkstream')}
+        >
+          Hawkstream
+        </a>
+
+        <a
+          className={isActive('/crew') ? 'is-active' : ''}
+          href={route('/crew')}
+        >
+          Meet the crew
+        </a>
+
+        <a
+          className={isActive('/get-involved') ? 'is-active' : ''}
+          href={route('/get-involved')}
+        >
+          Get involved
+        </a>
       </div>
-      <a className="nav-cta" href="https://www.youtube.com/@TheUNCWTealTV" target="_blank" rel="noreferrer">Watch on YouTube <ArrowUpRight /></a>
-      <button className="menu-button" aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} aria-expanded={isMenuOpen} onClick={() => setIsMenuOpen((open) => !open)}>☰</button>
+
+      <a
+        className="nav-cta"
+        href="https://www.youtube.com/@TheUNCWTealTV"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Watch on YouTube <ArrowUpRight />
+      </a>
+
+      <button
+        className="menu-button"
+        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isMenuOpen}
+        onClick={() => setIsMenuOpen((open) => !open)}
+      >
+        ☰
+      </button>
+
       {isMenuOpen && (
         <div className="mobile-menu">
-          <a className={isActive('/archive') ? 'is-active' : ''} href="/archive" onClick={closeMenu}>Archive</a>
-          <a className={isActive('/seahawk-central') ? 'is-active' : ''} href="/seahawk-central" onClick={closeMenu}>Seahawk Central</a>
-          <a className={isActive('/hawkstream') ? 'is-active' : ''} href="/hawkstream" onClick={closeMenu}>Hawkstream</a>
-          <a className={isActive('/crew') ? 'is-active' : ''} href="/crew" onClick={closeMenu}>Meet the crew</a>
-          <a className={isActive('/get-involved') ? 'is-active' : ''} href="/get-involved" onClick={closeMenu}>Get involved</a>
-          <a href="https://www.youtube.com/@TheUNCWTealTV" target="_blank" rel="noreferrer" onClick={closeMenu}>Watch on YouTube <ArrowUpRight /></a>
+          <a href={route('/archive')} onClick={closeMenu}>
+            Archive
+          </a>
+          <a href={route('/seahawk-central')} onClick={closeMenu}>
+            Seahawk Central
+          </a>
+          <a href={route('/hawkstream')} onClick={closeMenu}>
+            Hawkstream
+          </a>
+          <a href={route('/crew')} onClick={closeMenu}>
+            Meet the crew
+          </a>
+          <a href={route('/get-involved')} onClick={closeMenu}>
+            Get involved
+          </a>
+          <a
+            href="https://www.youtube.com/@TheUNCWTealTV"
+            target="_blank"
+            rel="noreferrer"
+            onClick={closeMenu}
+          >
+            Watch on YouTube <ArrowUpRight />
+          </a>
         </div>
       )}
     </nav>
@@ -59,7 +132,7 @@ function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-brand-group">
-        <a className="brand brand--footer" href="/"><span className="brand-word">TEAL<span>TV</span></span></a>
+        <a className="brand brand--footer" href={route('/')}><span className="brand-word">TEAL<span>TV</span></span></a>
         <div className="footer-links">
         <a href="https://www.youtube.com/@TheUNCWTealTV" target="_blank" rel="noreferrer">YouTube</a>
         <a href="https://www.instagram.com/uncwtealtv" target="_blank" rel="noreferrer">Instagram</a>
@@ -80,7 +153,7 @@ function Lane({ name, description, laneVideos, accent }: { name: ShowLane; descr
           <h2>{name}</h2>
           <p>{description}</p>
         </div>
-        <a href={path} className="text-link">View all <ArrowUpRight /></a>
+        <a href={route(path)} className="text-link">View all <ArrowUpRight /></a>
       </div>
       <div className="lane-grid">
         {laneVideos.slice(0, 3).map((video) => <VideoCard key={video.title} video={video} />)}
@@ -100,7 +173,7 @@ function SeriesPage({ name, description, laneVideos, accent }: { name: ShowLane;
       <section className="subpage-content">
         <div className="subpage-toolbar">
           <span>{laneVideos.length} episodes</span>
-          <a href="/archive" className="text-link">Full archive <ArrowUpRight /></a>
+          <a href={route('/archive')} className="text-link">Full archive <ArrowUpRight /></a>
         </div>
         <div className="archive-grid">{laneVideos.map((video) => <VideoCard key={video.title} video={video} />)}</div>
       </section>
@@ -202,7 +275,7 @@ function HomePage() {
         <div className="hero__copy">
           <h1>Teal<em>TV</em></h1>
           <p className="hero__intro"><strong>UNCW's  student broadcast network.</strong> Stories, voices, and ideas from the Port City; made by students, for everyone.</p>
-          <a className="primary-button" href="#shows">Explore the shows <ArrowUpRight /></a>
+          <a className="primary-button" href={route('#shows')}>Explore the shows <ArrowUpRight /></a>
         </div>
         <div className="hero__feature">
           <a className="hero__image-wrap" href={featured.url} target="_blank" rel="noreferrer" aria-label={`Watch ${featured.title}`}>
@@ -219,7 +292,7 @@ function HomePage() {
       <section className="content-section" id="shows">
         <div className="section-heading section-heading--latest">
           <div><h2>Latest drops</h2></div>
-          <a href="/archive" className="text-link">See the archive <ArrowUpRight /></a>
+          <a href={route('/archive')} className="text-link">See the archive <ArrowUpRight /></a>
         </div>
         <div className="latest-grid">{latest.slice(0, 3).map((video) => <VideoCard key={video.title} video={video} />)}</div>
       </section>
@@ -234,14 +307,14 @@ function HomePage() {
         <div className="about-section__copy">
           <h2>A training ground<br/>for <em>voices in media.</em></h2>
           <p>TealTV is UNCW’s only student-led media production organization. From scriptwriting to studio, we give students tools and audience to find their voice and make something worth watching.</p>
-          <a href="/crew" className="text-link text-link--dark">Meet the crew <ArrowUpRight /></a>
+          <a href={route('/crew')} className="text-link text-link--dark">Meet the crew <ArrowUpRight /></a>
         </div>
         <div className="stats">{stats.map((stat) => <div className="stat" key={stat.label}><strong>{stat.value}</strong><span>{stat.label}</span></div>)}</div>
       </section>
 
       <section className="join-section" id="join">
         <div><h2>Got a story?<br /><em>Let’s make it!</em></h2></div>
-        <div className="join-section__action"><p>Whether you’d rather be behind the camera, at the editing desk, or on screen, there’s a place for everyone at TealTV.</p><a className="primary-button primary-button--light" href="/get-involved">Get involved <ArrowUpRight /></a></div>
+        <div className="join-section__action"><p>Whether you’d rather be behind the camera, at the editing desk, or on screen, there’s a place for everyone at TealTV.</p><a className="primary-button primary-button--light" href={route('/get-involved')}>Get involved <ArrowUpRight /></a></div>
       </section>
       <SiteFooter />
     </main>
@@ -249,7 +322,10 @@ function HomePage() {
 }
 
 export function App() {
-  const path = window.location.pathname.replace(/\/$/, '') || '/'
+  const path =
+  window.location.pathname
+    .replace(basePath, '')
+    .replace(/\/$/, '') || '/'
   if (path === '/seahawk-central') return <SeriesPage name="Seahawk Central" description="The news and sports desk for what’s happening on campus, downtown, and everywhere in between." laneVideos={videos.filter((video) => video.show === 'Seahawk Central')} accent="#d6ad55" />
   if (path === '/hawkstream') return <SeriesPage name="Hawkstream" description="A creative current of art, sketch, and entertainment videos, hosted and edited by students." laneVideos={videos.filter((video) => video.show === 'Hawkstream')} accent="#8ddfd1" />
   if (path === '/crew') return <CrewPage />
